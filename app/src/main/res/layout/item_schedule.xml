@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F0F0F0"
+    android:layout_marginBottom="8dp"
+    android:elevation="2dp">
+
+    <!-- Subject Name -->
+    <TextView
+        android:id="@+id/tv_subject_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000" />
+
+    <!-- Time Allocation -->
+    <TextView
+        android:id="@+id/tv_time_allocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time: 2 hours"
+        android:textSize="16sp"
+        android:textColor="#666" />
+</LinearLayout>

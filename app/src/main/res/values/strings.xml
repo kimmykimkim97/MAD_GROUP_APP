@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Testing</string>
+    <string name="welcm">Welcome To GradeSync</string>
+    <string name="placeholder"> </string>
+    <string name="name">Name</string>
+    <string name="email"> Your E-mail</string>
+    <string name="password">Your Password</string>
+    <string name="password_comfirm">Confirm Password</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="Back">Back</string>
+    <string name="Next">Next</string>
+    <string name="Schedule">My Schedule</string>
+    <string name="Progress">My Progress</string>
+    <string name="UpdateGrades">Update Grades</string>
+    <string name="number_of_subjects">Select Number of Subjects</string>
+    <string name="Schedule_name">Schedule Name</string>
+
+    <string-array name="subject_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="grade_options">
+        <item>Select grade</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>F</item>
+    </string-array>
+
+    <string-array name="study_hours">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+</resources>

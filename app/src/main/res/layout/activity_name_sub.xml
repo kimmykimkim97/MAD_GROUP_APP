@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/reg2">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="379dp"
+            android:layout_height="490dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.003">
+
+            <TextView
+                android:id="@+id/tv_namesub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/im_namesub"
+                android:layout_width="259dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                app:srcCompat="@drawable/name_sub" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="379dp"
+            android:layout_height="240dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.135">
+
+            <TextView
+                android:id="@+id/tv_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Enter your details"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/tv_rcorner"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/spinner_subjects"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:prompt="@string/number_of_subjects"
+                android:background="@drawable/tv_rcorner"/>
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/Next"
+                android:textSize="20sp"
+                android:backgroundTint="@color/k_blackish"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

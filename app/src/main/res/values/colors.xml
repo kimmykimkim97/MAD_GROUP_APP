@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="k_green_d">#3F4238</color>
+    <color name="k_brown_d">#6D472E</color>
+    <color name="k_offwhite">#FFF1DE</color>
+    <color name="k_blackish">#343232</color>
+    <color name="black_kim">#242424</color>
+    <color name="k_green_b">#63836B</color>
+    <color name="k_tanned">#CFB48B</color>
+    <color name="k_brown_b">#B46E4C</color>
+    <color name="k_greengrad_1">#83AF8E</color>
+    <color name="k_greengrad_11">#9ECBC6</color>
+    <color name="k_offwhitegrad1">#DEE4CE</color>
+    <color name="k_offwhitegrad11">#EFE2D0</color>
+</resources>
