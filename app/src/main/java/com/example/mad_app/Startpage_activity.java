@@ -23,7 +23,7 @@ public class Startpage_activity extends AppCompatActivity {
         tvWelcomeMsg.setText(welcomMsg);
 
         btGetStarted.setOnClickListener(view -> {
-            Intent intent = new Intent(Startpage_activity.this,RegistrationActivity.class);
+            Intent intent = new Intent(Startpage_activity.this,NameSubActivity.class);
             startActivity(intent);
         });
 

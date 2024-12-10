@@ -16,7 +16,7 @@ public class Load_activity extends AppCompatActivity {
         LottieAnimationView animationView = findViewById(R.id.lv_loading);
         animationView.playAnimation(); // Start the animation
 
-        // Using Handler to delay the transition to the next activity
+        // Handler to delay the transition to the next activity
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(Load_activity.this, RegistrationActivity.class);
             startActivity(intent);

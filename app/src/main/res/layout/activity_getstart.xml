@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".getStart_activity"
+    tools:context=".Startpage_activity"
     android:background="@drawable/main1">
 
     <androidx.constraintlayout.widget.ConstraintLayout

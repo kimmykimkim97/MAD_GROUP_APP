@@ -56,6 +56,10 @@ dependencies {
     //gson
     implementation ("com.google.code.gson:gson:2.8.9")
 
+
+    implementation ("androidx.work:work-runtime:2.7.1")
+    implementation ("androidx.core:core-ktx:1.10.1")
+
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("androidx.core:core:1.10.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
