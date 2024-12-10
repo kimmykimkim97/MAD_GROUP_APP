@@ -79,7 +79,6 @@ public class MyScheduleActivity extends AppCompatActivity {
                             }
                             updateRecyclerView(scheduleList);
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             Toast.makeText(MyScheduleActivity.this, "Failed to load schedules.", Toast.LENGTH_SHORT).show();
@@ -106,7 +105,6 @@ public class MyScheduleActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         processScheduleData(dataSnapshot);
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.e("MyScheduleActivity", "Failed to fetch data from Realtime Database", databaseError.toException());
@@ -129,11 +127,9 @@ public class MyScheduleActivity extends AppCompatActivity {
                 scheduleList.add(item);
             }
         }
-
         if (scheduleList.isEmpty()) {
             Toast.makeText(this, "No schedules found in database.", Toast.LENGTH_SHORT).show();
         }
-
         scheduleAdapter.notifyDataSetChanged(); // Notify adapter of data change
     }
 
