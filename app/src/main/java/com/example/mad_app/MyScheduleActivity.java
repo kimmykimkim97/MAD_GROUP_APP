@@ -62,32 +62,30 @@ public class MyScheduleActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            DatabaseReference scheduleRef = FirebaseDatabase.getInstance()
-                    .getReference("users")
-                    .child(userId)
-                    .child("schedules");
+            DatabaseReference scheduleRef = databaseReference.child("users").child(userId).child("schedules");
 
-            scheduleRef.orderByChild("date").equalTo(date)  // Query for schedules on the selected date
+            scheduleRef.orderByChild("date").equalTo(date)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             List<ScheduleItem> scheduleList = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 ScheduleItem item = snapshot.getValue(ScheduleItem.class);
-                                scheduleList.add(item);
+                                if (item != null) {
+                                    scheduleList.add(item);
+                                }
                             }
-
-                            // Pass scheduleList to RecyclerView or another view to display the schedules
                             updateRecyclerView(scheduleList);
                         }
 
                         @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
                             Toast.makeText(MyScheduleActivity.this, "Failed to load schedules.", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
+
     private void updateRecyclerView(List<ScheduleItem> scheduleList) {
         // Assuming you have a RecyclerView and an Adapter (ScheduleAdapter) already set up
         ScheduleAdapter adapter = (ScheduleAdapter) recyclerViewSchedule.getAdapter();
@@ -124,9 +122,12 @@ public class MyScheduleActivity extends AppCompatActivity {
             String subjectName = scheduleSnapshot.child("subject").getValue(String.class);
             String grade = scheduleSnapshot.child("grade").getValue(String.class);
             String timeAllocated = scheduleSnapshot.child("allocatedTime").getValue(String.class);
+            Boolean isChecked = scheduleSnapshot.child("isChecked").getValue(Boolean.class);
 
             if (subjectName != null && grade != null && timeAllocated != null) {
-                scheduleList.add(new ScheduleItem(subjectName, grade, timeAllocated, 0.0));
+                ScheduleItem item = new ScheduleItem(subjectName, grade, timeAllocated, 0.0);
+                item.setChecked(isChecked != null && isChecked); // Default to false if null
+                scheduleList.add(item);
             }
         }
 
@@ -136,4 +137,5 @@ public class MyScheduleActivity extends AppCompatActivity {
 
         scheduleAdapter.notifyDataSetChanged(); // Notify adapter of data change
     }
+
 }

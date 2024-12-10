@@ -143,13 +143,10 @@ public class StudyScheduleActivity extends AppCompatActivity {
                 scheduleObject.put("subject", item.getSubject());
                 scheduleObject.put("grade", item.getGrade());
                 scheduleObject.put("allocatedTime", item.getSchedule());
-
                 scheduleArray.put(scheduleObject);
             }
-
             editor.putString("schedules", scheduleArray.toString());
             editor.apply();
-
             Toast.makeText(this, "Schedule saved locally!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "Error saving locally: " + e.getMessage(), Toast.LENGTH_SHORT).show();

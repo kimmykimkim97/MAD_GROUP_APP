@@ -26,4 +26,10 @@
         android:text="Time: 2 hours"
         android:textSize="16sp"
         android:textColor="#666" />
+    <!-- Checkbox -->
+    <CheckBox
+        android:id="@+id/checkbox_completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mark as Completed" />
 </LinearLayout>

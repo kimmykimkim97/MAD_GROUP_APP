@@ -5,12 +5,15 @@ public class ScheduleItem {
     private String grade;
     private String schedule;
     private double timeAllocated;
+    private boolean isChecked;
+
     private String date;
     public ScheduleItem(String subject, String grade, String schedule, double timeAllocated) {
         this.subject = subject;
         this.grade = grade;
         this.schedule = schedule;
         this.timeAllocated = timeAllocated;
+        this.isChecked = false;
 
     }
     public void ScheduleItem1(String subject, String grade, String schedule, double timeAllocated, String date) {
@@ -21,6 +24,13 @@ public class ScheduleItem {
         this.date = date;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
     public String getSubject() {
         return subject;
     }
