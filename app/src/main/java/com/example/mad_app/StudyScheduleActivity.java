@@ -145,6 +145,7 @@ public class StudyScheduleActivity extends AppCompatActivity {
                 scheduleObject.put("allocatedTime", item.getSchedule());
                 scheduleArray.put(scheduleObject);
             }
+
             editor.putString("schedules", scheduleArray.toString());
             editor.apply();
             Toast.makeText(this, "Schedule saved locally!", Toast.LENGTH_SHORT).show();
