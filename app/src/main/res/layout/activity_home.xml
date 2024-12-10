@@ -120,7 +120,7 @@
                                 android:id="@+id/tv_updateGrade"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="@string/UpdateGrades"
+                                android:text="@string/UpdateSchedule"
                                 android:textSize="25sp" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>

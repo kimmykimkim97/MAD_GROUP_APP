@@ -15,6 +15,7 @@
     <string name="UpdateGrades">Update Grades</string>
     <string name="number_of_subjects">Select Number of Subjects</string>
     <string name="Schedule_name">Schedule Name</string>
+    <string name="UpdateSchedule">Update Schedule</string>
 
     <string-array name="subject_numbers">
         <item>1</item>
