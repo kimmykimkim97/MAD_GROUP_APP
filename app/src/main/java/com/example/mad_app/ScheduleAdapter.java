@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -18,16 +19,27 @@ import java.util.List;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
 
-    private List<ScheduleItem> scheduleList;
+    private final List<ScheduleItem> scheduleList;
+    private final OnDeleteClickListener onDeleteClickListener; // Optional listener for delete button
 
-    public ScheduleAdapter(List<ScheduleItem> scheduleList) {
+    // Constructor for cases with delete functionality
+    public ScheduleAdapter(List<ScheduleItem> scheduleList, OnDeleteClickListener onDeleteClickListener) {
         this.scheduleList = scheduleList;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
-    public void updateScheduleList(List<ScheduleItem> newScheduleList) {
-        this.scheduleList = newScheduleList;
-        notifyDataSetChanged();  // Notify the adapter to refresh the view with the new data
+    // Alternative constructor when no delete functionality is needed
+    public ScheduleAdapter(List<ScheduleItem> scheduleList) {
+        this(scheduleList, null);
     }
+
+    // Update schedule list dynamically
+    public void updateScheduleList(List<ScheduleItem> newScheduleList) {
+        this.scheduleList.clear();
+        this.scheduleList.addAll(newScheduleList);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,32 +47,38 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return new ScheduleViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ScheduleViewHolder holder, int position) {
         ScheduleItem item = scheduleList.get(position);
+
+        // Bind data to the view holder
         holder.tvSubjectName.setText(item.getSubject() + " - Grade: " + item.getGrade());
         holder.tvAllocatedTime.setText("Time: " + item.getSchedule());
         holder.checkboxCompleted.setChecked(item.isChecked());
 
-        holder.checkboxCompleted.setChecked(item.isChecked());
-
+        // Handle checkbox state changes and sync with Firebase
         holder.checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (item != null && item.getSubject() != null) {
-                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // Get the current user's ID
-                String path = "users/" + userId + "/schedules/" + item.getSubject();
-
-                // Ensure the path is valid
-                if (userId != null && item.getSubject() != null) {
+                String userId = FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
+                if (userId != null) {
+                    String path = "users/" + userId + "/schedules/" + item.getSubject();
                     DatabaseReference scheduleRef = FirebaseDatabase.getInstance().getReference(path);
-                    scheduleRef.child("completed").setValue(isChecked);  // Update checkbox state in Firebase
+                    scheduleRef.child("completed").setValue(isChecked); // Update checkbox state in Firebase
                 } else {
-                    Log.e("ScheduleAdapter", "User ID or Subject Name is null. Cannot update Firebase.");
+                    Log.e("ScheduleAdapter", "User ID is null. Cannot update Firebase.");
                 }
             } else {
                 Log.e("ScheduleAdapter", "Schedule item or subject name is null.");
             }
         });
+
+        // Hide or handle delete button visibility based on listener
+        if (onDeleteClickListener == null) {
+            holder.btnDelete.setVisibility(View.GONE);
+        } else {
+            holder.btnDelete.setVisibility(View.VISIBLE);
+            holder.btnDelete.setOnClickListener(v -> onDeleteClickListener.onDeleteClick(item));
+        }
     }
 
     @Override
@@ -68,16 +86,25 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return scheduleList.size();
     }
 
+    // ViewHolder for RecyclerView
     public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView tvSubjectName, tvAllocatedTime;
         CheckBox checkboxCompleted;
+        Button btnDelete; // Optional delete button
 
         public ScheduleViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSubjectName = itemView.findViewById(R.id.tv_subject_name);  // Make sure ID matches
-            tvAllocatedTime = itemView.findViewById(R.id.tv_time_allocation); // Make sure ID matches
 
+            // Initialize views
+            tvSubjectName = itemView.findViewById(R.id.tv_subject_name);
+            tvAllocatedTime = itemView.findViewById(R.id.tv_time_allocation);
             checkboxCompleted = itemView.findViewById(R.id.checkbox_completed);
+            btnDelete = itemView.findViewById(R.id.btn_delete);
         }
+    }
+
+    // Listener interface for delete button
+    public interface OnDeleteClickListener {
+        void onDeleteClick(ScheduleItem item);
     }
 }

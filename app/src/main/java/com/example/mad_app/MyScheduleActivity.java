@@ -40,20 +40,22 @@ public class MyScheduleActivity extends AppCompatActivity {
         recyclerViewSchedule = findViewById(R.id.recycler_view_schedule);
         recyclerViewSchedule.setLayoutManager(new LinearLayoutManager(this));
         scheduleList = new ArrayList<>();
-        scheduleAdapter = new ScheduleAdapter(scheduleList);
+        scheduleAdapter = new ScheduleAdapter(scheduleList, new ScheduleAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(ScheduleItem item) {
+                deleteScheduleItem(item); // Define this method to handle deletion
+            }
+        });
         recyclerViewSchedule.setAdapter(scheduleAdapter);
 
         // Set the date change listener
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;  // Month is 0-based, so we add 1
             Toast.makeText(MyScheduleActivity.this, "Selected date: " + selectedDate, Toast.LENGTH_SHORT).show();
-
-            // Now you can query or display schedules for this date
             loadSchedulesForDate(selectedDate);
         });
         // Initialize Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance("https://gradesync-790d0-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
-
         // Load the schedule from Realtime Database
         loadScheduleFromFirebase();
     }
@@ -87,13 +89,10 @@ public class MyScheduleActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView(List<ScheduleItem> scheduleList) {
-        // Assuming you have a RecyclerView and an Adapter (ScheduleAdapter) already set up
         ScheduleAdapter adapter = (ScheduleAdapter) recyclerViewSchedule.getAdapter();
         if (scheduleList.isEmpty()) {
-            // Show a message or placeholder if no schedules are available
             Toast.makeText(MyScheduleActivity.this, "No schedules for this date", Toast.LENGTH_SHORT).show();
         }
-        // Update the list of schedules in the adapter
         adapter.updateScheduleList(scheduleList);
     }
 
@@ -136,6 +135,29 @@ public class MyScheduleActivity extends AppCompatActivity {
         }
 
         scheduleAdapter.notifyDataSetChanged(); // Notify adapter of data change
+    }
+
+    private void deleteScheduleItem(ScheduleItem item) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (userId != null && item != null && item.getSubject() != null) {
+            DatabaseReference scheduleRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId)
+                    .child("schedules")
+                    .child(item.getSubject());
+
+            scheduleRef.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(MyScheduleActivity.this, "Schedule deleted successfully.", Toast.LENGTH_SHORT).show();
+                    scheduleList.remove(item); // Remove the item locally
+                    scheduleAdapter.notifyDataSetChanged(); // Notify the adapter
+                } else {
+                    Toast.makeText(MyScheduleActivity.this, "Failed to delete schedule.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(MyScheduleActivity.this, "Invalid schedule or user ID.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
