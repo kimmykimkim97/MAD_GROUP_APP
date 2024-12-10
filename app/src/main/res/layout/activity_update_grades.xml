@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".UpdateGradesActivity">
+
+    <!-- Input for entering total study hours -->
+    <EditText
+        android:id="@+id/editTextStudyHours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter total study hours"
+        android:inputType="numberDecimal"
+        android:padding="8dp" />
+
+    <!-- Space to visually separate sections -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- RecyclerView for displaying/updating grades -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_grades"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:background="#EFEFEF"/>
+
+    <!-- Space to visually separate sections -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Button to save updated grades -->
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Grades"
+        android:padding="8dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF" />
+
+    <!-- Button to trigger schedule regeneration -->
+    <Button
+        android:id="@+id/btn_regenerate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regenerate Schedule"
+        android:padding="8dp"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF" />
+</LinearLayout>

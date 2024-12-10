@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- TextView to show the subject name -->
+    <TextView
+        android:id="@+id/text_subject"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Subject Name"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:paddingStart="4dp"/>
+
+    <!-- EditText for grade editing -->
+    <EditText
+        android:id="@+id/edit_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3"
+        android:inputType="text"
+        android:hint="Grade"
+        android:background="@android:drawable/edit_text"
+        android:padding="4dp"
+        android:textColor="#555555"/>
+
+</LinearLayout>

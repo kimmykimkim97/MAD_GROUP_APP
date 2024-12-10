@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "227702286375",
+    "project_id": "gradesync-790d0",
+    "storage_bucket": "gradesync-790d0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227702286375:android:c6225d3eeb13b2e9ec0602",
+        "android_client_info": {
+          "package_name": "com.example.mad_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDBS0_KfkwgJA3AeltxhBxmk-s0z6l700"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
