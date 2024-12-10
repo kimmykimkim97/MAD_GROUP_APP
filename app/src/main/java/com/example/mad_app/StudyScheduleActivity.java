@@ -132,25 +132,5 @@ public class StudyScheduleActivity extends AppCompatActivity {
         }
     }
 
-    private void saveSchedulesToSharedPreferences() {
-        try {
-            SharedPreferences sharedPreferences = getSharedPreferences("UserScheduleData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            JSONArray scheduleArray = new JSONArray();
-            for (ScheduleItem item : scheduleList) {
-                JSONObject scheduleObject = new JSONObject();
-                scheduleObject.put("subject", item.getSubject());
-                scheduleObject.put("grade", item.getGrade());
-                scheduleObject.put("allocatedTime", item.getSchedule());
-                scheduleArray.put(scheduleObject);
-            }
-
-            editor.putString("schedules", scheduleArray.toString());
-            editor.apply();
-            Toast.makeText(this, "Schedule saved locally!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(this, "Error saving locally: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 }
