@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:background="@drawable/tv_rcorner"
-                android:hint="@string/name"
+                android:hint="@string/Schedule_name"
                 android:inputType="textPersonName"
                 android:textSize="20sp" />
 

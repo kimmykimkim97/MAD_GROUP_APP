@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".MyScheduleActivity">
+    tools:context=".MyScheduleActivity"
+    android:background="@drawable/w2">
+
+    <android.widget.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="309dp"
+        android:layout_height="295dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/tv_rcorner" />
 
     <TextView
         android:id="@+id/tv_title"
