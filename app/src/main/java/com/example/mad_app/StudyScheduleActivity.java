@@ -140,9 +140,9 @@ public class StudyScheduleActivity extends AppCompatActivity {
             JSONArray scheduleArray = new JSONArray();
             for (ScheduleItem item : scheduleList) {
                 JSONObject scheduleObject = new JSONObject();
-                scheduleObject.put("subject", item.getSubject());
-                scheduleObject.put("grade", item.getGrade());
-                scheduleObject.put("allocatedTime", item.getSchedule());
+                scheduleObject.pu("subject", item.getSubject());
+                scheduleObject.pu("grade", item.getGrade());
+                scheduleObject.pu("allocatedTime", item.getSchedule());
                 scheduleArray.put(scheduleObject);
             }
 
