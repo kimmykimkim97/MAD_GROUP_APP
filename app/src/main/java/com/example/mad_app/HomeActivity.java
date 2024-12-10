@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void openUpdateGradeActivity() {
-        Intent intent = new Intent(this, UpdateGradesActivity.class);
+        Intent intent = new Intent(this, NameSubActivity.class);
         startActivity(intent);
     }
 

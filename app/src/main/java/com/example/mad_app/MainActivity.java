@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
-       // Using Handler to delay the transition to the next activity
+        // Using Handler to delay the transition to the next activity
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(MainActivity.this, Load_activity.class);
             startActivity(intent);
