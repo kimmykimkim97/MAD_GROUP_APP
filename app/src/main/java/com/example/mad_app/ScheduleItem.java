@@ -7,23 +7,16 @@ public class ScheduleItem {
     private double timeAllocated;
     private boolean isChecked;
 
-    private String date;
+    // Constructor to initialize the object with subject, grade, schedule, and time allocated
     public ScheduleItem(String subject, String grade, String schedule, double timeAllocated) {
         this.subject = subject;
         this.grade = grade;
         this.schedule = schedule;
         this.timeAllocated = timeAllocated;
-        this.isChecked = false;
-
-    }
-    public void ScheduleItem1(String subject, String grade, String schedule, double timeAllocated, String date) {
-        this.subject = subject;
-        this.grade = grade;
-        this.schedule = schedule;
-        this.timeAllocated = timeAllocated;
-        this.date = date;
+        this.isChecked = false;  // Default value for isChecked
     }
 
+    // Getters and Setters for all fields
     public boolean isChecked() {
         return isChecked;
     }
@@ -31,6 +24,7 @@ public class ScheduleItem {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+
     public String getSubject() {
         return subject;
     }
@@ -54,18 +48,12 @@ public class ScheduleItem {
     public void setSchedule(String schedule) {
         this.schedule = schedule;
     }
+
     public double getTimeAllocated() {
         return timeAllocated;
     }
 
     public void setTimeAllocated(double timeAllocated) {
         this.timeAllocated = timeAllocated;
-    }
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 }
