@@ -26,13 +26,12 @@ public class Login_activity extends AppCompatActivity {
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize UI elements
         bt_login = findViewById(R.id.bt_Login);
         bt_back = findViewById(R.id.bt_Back);
         et_email = findViewById(R.id.et_email);
         et_password = findViewById(R.id.et_password);
 
-        // Login Button Click Listener
+        // Login
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,14 +63,13 @@ public class Login_activity extends AppCompatActivity {
             }
         });
 
-        // Back Button Click Listener
+        // Back
         bt_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate back to the RegistrationActivity
                 Intent intent = new Intent(Login_activity.this, RegistrationActivity.class);
                 startActivity(intent);
-                finish(); // Finish login activity
+                finish();
             }
         });
     }
