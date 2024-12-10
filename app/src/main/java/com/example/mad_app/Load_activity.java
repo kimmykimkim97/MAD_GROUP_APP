@@ -6,7 +6,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 
-public class LoadActivity extends AppCompatActivity {
+public class Load_activity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class LoadActivity extends AppCompatActivity {
 
         // Using Handler to delay the transition to the next activity
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(LoadActivity.this, RegistrationActivity.class);
+            Intent intent = new Intent(Load_activity.this, RegistrationActivity.class);
             startActivity(intent);
         }, 4000); // Delay in milliseconds (4000ms = 4 seconds)
     }

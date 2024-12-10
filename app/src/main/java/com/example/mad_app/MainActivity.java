@@ -9,7 +9,6 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBar actionBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
        // Using Handler to delay the transition to the next activity
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(MainActivity.this, Load_activity.class);
+            Intent intent = new Intent(MainActivity.this, LoadActivity.class);
             startActivity(intent);
             finish(); // Close the splash screen activity
         }, 4000); // Delay in milliseconds (3000ms = 3 seconds)
