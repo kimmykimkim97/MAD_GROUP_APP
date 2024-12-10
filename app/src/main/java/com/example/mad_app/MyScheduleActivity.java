@@ -25,63 +25,72 @@ public class MyScheduleActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewSchedule;
     private ScheduleAdapter scheduleAdapter;
-    private List<ScheduleItem> scheduleList = new ArrayList<>();
+    private List<ScheduleItem> scheduleList;
     private CalendarView calendarView;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference; // Reference to Realtime Database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_schedule);
 
+        // Initialize the CalendarView
         calendarView = findViewById(R.id.calendar_view);
+        // Initialize RecyclerView and Adapter
         recyclerViewSchedule = findViewById(R.id.recycler_view_schedule);
         recyclerViewSchedule.setLayoutManager(new LinearLayoutManager(this));
-        scheduleAdapter = new ScheduleAdapter(scheduleList);
+        scheduleList = new ArrayList<>();
+        scheduleAdapter = new ScheduleAdapter(scheduleList, new ScheduleAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(ScheduleItem item) {
+                deleteScheduleItem(item); // Define this method to handle deletion
+            }
+        });
         recyclerViewSchedule.setAdapter(scheduleAdapter);
 
+        // Set the date change listener
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+            String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;  // Month is 0-based, so we add 1
             Toast.makeText(MyScheduleActivity.this, "Selected date: " + selectedDate, Toast.LENGTH_SHORT).show();
-            loadSchedulesForDate();  // Now doesn't need to pass date
+            loadSchedulesForDate(selectedDate);
         });
-
+        // Initialize Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance("https://gradesync-790d0-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
+        // Load the schedule from Realtime Database
         loadScheduleFromFirebase();
     }
 
-    // No longer use date parameter here
-    private void loadSchedulesForDate() {
+    private void loadSchedulesForDate(String date) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
             DatabaseReference scheduleRef = databaseReference.child("users").child(userId).child("schedules");
 
-            scheduleRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    List<ScheduleItem> scheduleList = new ArrayList<>();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        ScheduleItem item = snapshot.getValue(ScheduleItem.class);
-                        if (item != null) {
-                            scheduleList.add(item);
+            scheduleRef.orderByChild("date").equalTo(date)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            List<ScheduleItem> scheduleList = new ArrayList<>();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                ScheduleItem item = snapshot.getValue(ScheduleItem.class);
+                                if (item != null) {
+                                    scheduleList.add(item);
+                                }
+                            }
+                            updateRecyclerView(scheduleList);
                         }
-                    }
-                    updateRecyclerView(scheduleList);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(MyScheduleActivity.this, "Failed to load schedules.", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(MyScheduleActivity.this, "Failed to load schedules.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
     private void updateRecyclerView(List<ScheduleItem> scheduleList) {
         ScheduleAdapter adapter = (ScheduleAdapter) recyclerViewSchedule.getAdapter();
         if (scheduleList.isEmpty()) {
-            Toast.makeText(MyScheduleActivity.this, "No schedules available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyScheduleActivity.this, "No schedules for this date", Toast.LENGTH_SHORT).show();
         }
         adapter.updateScheduleList(scheduleList);
     }
@@ -91,12 +100,11 @@ public class MyScheduleActivity extends AppCompatActivity {
         String userId = user != null ? user.getUid() : "unknown";
 
         databaseReference.child("users").child(userId).child("schedules")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         processScheduleData(dataSnapshot);
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.e("MyScheduleActivity", "Failed to fetch data from Realtime Database", databaseError.toException());
@@ -106,24 +114,46 @@ public class MyScheduleActivity extends AppCompatActivity {
     }
 
     private void processScheduleData(DataSnapshot dataSnapshot) {
-        scheduleList.clear();
+        scheduleList.clear(); // Clear old data
         for (DataSnapshot scheduleSnapshot : dataSnapshot.getChildren()) {
             String subjectName = scheduleSnapshot.child("subject").getValue(String.class);
             String grade = scheduleSnapshot.child("grade").getValue(String.class);
-            String timeAllocated = scheduleSnapshot.child("timeAllocated").getValue(String.class);
+            String timeAllocated = scheduleSnapshot.child("allocatedTime").getValue(String.class);
             Boolean isChecked = scheduleSnapshot.child("isChecked").getValue(Boolean.class);
 
             if (subjectName != null && grade != null && timeAllocated != null) {
-                ScheduleItem item = new ScheduleItem(subjectName, grade, timeAllocated, 0.0);  // No date needed
-                item.setChecked(isChecked != null && isChecked);
+                ScheduleItem item = new ScheduleItem(subjectName, grade, timeAllocated, 0.0);
+                item.setChecked(isChecked != null && isChecked); // Default to false if null
                 scheduleList.add(item);
             }
         }
-
         if (scheduleList.isEmpty()) {
             Toast.makeText(this, "No schedules found in database.", Toast.LENGTH_SHORT).show();
         }
-
-        scheduleAdapter.notifyDataSetChanged();
+        scheduleAdapter.notifyDataSetChanged(); // Notify adapter of data change
     }
+
+    private void deleteScheduleItem(ScheduleItem item) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (userId != null && item != null && item.getSubject() != null) {
+            DatabaseReference scheduleRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId)
+                    .child("schedules")
+                    .child(item.getSubject());
+
+            scheduleRef.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(MyScheduleActivity.this, "Schedule deleted successfully.", Toast.LENGTH_SHORT).show();
+                    scheduleList.remove(item); // Remove the item locally
+                    scheduleAdapter.notifyDataSetChanged(); // Notify the adapter
+                } else {
+                    Toast.makeText(MyScheduleActivity.this, "Failed to delete schedule.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(MyScheduleActivity.this, "Invalid schedule or user ID.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
