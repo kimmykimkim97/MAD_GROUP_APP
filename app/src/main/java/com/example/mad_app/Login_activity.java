@@ -26,13 +26,12 @@ public class Login_activity extends AppCompatActivity {
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize UI elements
         bt_login = findViewById(R.id.bt_Login);
         bt_back = findViewById(R.id.bt_Back);
         et_email = findViewById(R.id.et_email);
         et_password = findViewById(R.id.et_password);
 
-        // Login Button Click Listener
+        // Login
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +39,7 @@ public class Login_activity extends AppCompatActivity {
                 String password = et_password.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(Login_activity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login_activity.this, "Please enter your e-mail", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
@@ -53,10 +52,9 @@ public class Login_activity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(Login_activity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                // Navigate to Home Activity
                                 Intent intent = new Intent(Login_activity.this, HomeActivity.class);
                                 startActivity(intent);
-                                finish(); // Finish login activity
+                                finish();
                             } else {
                                 Toast.makeText(Login_activity.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -64,14 +62,13 @@ public class Login_activity extends AppCompatActivity {
             }
         });
 
-        // Back Button Click Listener
+        // Back
         bt_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate back to the RegistrationActivity
                 Intent intent = new Intent(Login_activity.this, RegistrationActivity.class);
                 startActivity(intent);
-                finish(); // Finish login activity
+                finish();
             }
         });
     }
