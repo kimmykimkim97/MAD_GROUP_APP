@@ -61,7 +61,7 @@ public class StudyScheduleActivity extends AppCompatActivity {
         }
 
         // Set up RecyclerView
-        scheduleAdapter = new ScheduleAdapter(scheduleList);
+        scheduleAdapter = new ScheduleAdapter(this, scheduleList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(scheduleAdapter);
 

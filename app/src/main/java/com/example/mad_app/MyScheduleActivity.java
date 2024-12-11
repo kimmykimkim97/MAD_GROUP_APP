@@ -34,23 +34,21 @@ public class MyScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_schedule);
 
-        // Initialize the CalendarView
         calendarView = findViewById(R.id.calendar_view);
-        // Initialize RecyclerView and Adapter
         recyclerViewSchedule = findViewById(R.id.recycler_view_schedule);
         recyclerViewSchedule.setLayoutManager(new LinearLayoutManager(this));
+
         scheduleList = new ArrayList<>();
-        scheduleAdapter = new ScheduleAdapter(scheduleList, new ScheduleAdapter.OnDeleteClickListener() {
+        scheduleAdapter = new ScheduleAdapter(this, scheduleList, new ScheduleAdapter.OnDeleteClickListener() {
             @Override
             public void onDeleteClick(ScheduleItem item) {
-                deleteScheduleItem(item); // Define this method to handle deletion
+                deleteScheduleItem(item);
             }
         });
         recyclerViewSchedule.setAdapter(scheduleAdapter);
 
-        // Set the date change listener
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;  // Month is 0-based, so we add 1
+            String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
             Toast.makeText(MyScheduleActivity.this, "Selected date: " + selectedDate, Toast.LENGTH_SHORT).show();
             loadSchedulesForDate(selectedDate);
         });

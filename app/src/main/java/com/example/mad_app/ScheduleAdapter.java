@@ -1,5 +1,7 @@
 package com.example.mad_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,29 +17,37 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
 
     private final List<ScheduleItem> scheduleList;
     private final OnDeleteClickListener onDeleteClickListener; // Optional listener for delete button
+    private final Context context; // Context for SharedPreferences
 
-    // Constructor for cases with delete functionality
-    public ScheduleAdapter(List<ScheduleItem> scheduleList, OnDeleteClickListener onDeleteClickListener) {
+    public static final String PREFS_NAME = "UserScheduleData";
+    public static final String SCHEDULE_KEY = "schedules";
+
+    // Constructor with SharedPreferences support
+    public ScheduleAdapter(Context context, List<ScheduleItem> scheduleList, OnDeleteClickListener onDeleteClickListener) {
+        this.context = context;
         this.scheduleList = scheduleList;
         this.onDeleteClickListener = onDeleteClickListener;
     }
 
-    // Alternative constructor when no delete functionality is needed
-    public ScheduleAdapter(List<ScheduleItem> scheduleList) {
-        this(scheduleList, null);
+    public ScheduleAdapter(Context context, List<ScheduleItem> scheduleList) {
+        this(context, scheduleList, null);
     }
 
-    // Update schedule list dynamically
     public void updateScheduleList(List<ScheduleItem> newScheduleList) {
         this.scheduleList.clear();
         this.scheduleList.addAll(newScheduleList);
         notifyDataSetChanged();
+        saveSchedulesToSharedPreferences();
     }
 
     @NonNull
@@ -58,6 +68,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
         // Handle checkbox state changes and sync with Firebase
         holder.checkboxCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            item.setChecked(isChecked);
+            saveSchedulesToSharedPreferences(); // Save changes locally
+
             if (item != null && item.getSubject() != null) {
                 String userId = FirebaseAuth.getInstance().getCurrentUser() != null ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
                 if (userId != null) {
@@ -86,7 +99,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         return scheduleList.size();
     }
 
-    // ViewHolder for RecyclerView
     public static class ScheduleViewHolder extends RecyclerView.ViewHolder {
         TextView tvSubjectName, tvAllocatedTime;
         CheckBox checkboxCompleted;
@@ -106,5 +118,56 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     // Listener interface for delete button
     public interface OnDeleteClickListener {
         void onDeleteClick(ScheduleItem item);
+    }
+
+    // Save schedule list to SharedPreferences
+    private void saveSchedulesToSharedPreferences() {
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            JSONArray scheduleArray = new JSONArray();
+            for (ScheduleItem item : scheduleList) {
+                JSONObject scheduleObject = new JSONObject();
+                scheduleObject.put("subject", item.getSubject());
+                scheduleObject.put("grade", item.getGrade());
+                scheduleObject.put("schedule", item.getSchedule());
+                scheduleObject.put("timeAllocated", item.getTimeAllocated());
+                scheduleObject.put("completed", item.isChecked());
+                scheduleArray.put(scheduleObject);
+            }
+
+            editor.putString(SCHEDULE_KEY, scheduleArray.toString());
+            editor.apply();
+        } catch (JSONException e) {
+            Log.e("ScheduleAdapter", "Error saving to SharedPreferences: " + e.getMessage());
+        }
+    }
+
+    // Load schedule list from SharedPreferences
+    public void loadSchedulesFromSharedPreferences() {
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            String scheduleJson = sharedPreferences.getString(SCHEDULE_KEY, "");
+
+            if (!scheduleJson.isEmpty()) {
+                JSONArray scheduleArray = new JSONArray(scheduleJson);
+                scheduleList.clear();
+                for (int i = 0; i < scheduleArray.length(); i++) {
+                    JSONObject scheduleObject = scheduleArray.getJSONObject(i);
+                    ScheduleItem item = new ScheduleItem(
+                            scheduleObject.getString("subject"),
+                            scheduleObject.getString("grade"),
+                            scheduleObject.getString("schedule"),
+                            scheduleObject.getDouble("timeAllocated")
+                    );
+                    item.setChecked(scheduleObject.getBoolean("completed"));
+                    scheduleList.add(item);
+                }
+                notifyDataSetChanged();
+            }
+        } catch (JSONException e) {
+            Log.e("ScheduleAdapter", "Error loading from SharedPreferences: " + e.getMessage());
+        }
     }
 }
